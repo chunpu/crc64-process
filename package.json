@@ -1,5 +1,26 @@
 {
   "dependencies": {
     "crc64-ecma182": "^1.0.0"
-  }
+  },
+  "name": "crc64-process",
+  "description": "Calc crc64 by fork child process",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chunpu/crc64-process.git"
+  },
+  "keywords": [
+    "crc64"
+  ],
+  "author": "chunpu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chunpu/crc64-process/issues"
+  },
+  "homepage": "https://github.com/chunpu/crc64-process#readme"
 }
