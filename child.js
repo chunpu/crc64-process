@@ -1,10 +1,17 @@
 const crc64 = require('crc64-ecma182')
 
-crc64.crc64File(process.argv[2], function(err, data) {
-  if (err) {
-    process.send({ error: err })
-  } else {
-    process.send({ data: data })
+process.on('message', data => {
+  if (data) {
+    crc64.crc64File(data.filePath, function(error, hash) {
+      var result = data
+      if (error) {
+        result.error = error
+        result.success = false
+      } else {
+        result.success = true
+        result.hash = hash
+      }
+      process.send(result)
+    })
   }
-  process.exit(0)
 })

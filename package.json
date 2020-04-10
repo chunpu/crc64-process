@@ -1,10 +1,11 @@
 {
   "dependencies": {
-    "crc64-ecma182": "^1.0.0"
+    "crc64-ecma182": "^1.0.0",
+    "shortid": "^2.2.15"
   },
   "name": "crc64-process",
   "description": "Calc crc64 by fork child process",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "devDependencies": {},
   "scripts": {

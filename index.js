@@ -1,18 +1,45 @@
 const child = require('child_process')
 const path = require('path')
+const crc64 = require('crc64-ecma182')
+const shortid = require('shortid')
+const EventEmitter = require('events')
+const eventHub = new EventEmitter()
+const scriptPath = path.join(__dirname, 'child.js')
+const forked = child.fork(scriptPath)
 
-function crc64FileProcess(filePath, fn) {
-  var scirptPath = path.join(__dirname, 'child.js')
-  var forked = child.fork(scirptPath, [filePath])
+forked.on('message', data => {
+  if (data && data.eventId) {
+    eventHub.emit(`channel:${data.eventId}`, data)
+  }
+})
+
+function crc64FileProcess(filePath) {
   return new Promise(function(resolve, reject) {
-    forked.on('message', function(data) {
-      if (data.error) {
-        reject(data.error)
+    const eventId = shortid.generate()
+    eventHub.once(`channel:${eventId}`, data => {
+      if (data.success) {
+        resolve(data.hash)
       } else {
-        resolve(data.data)
+        reject(data.error)
+      }
+    })
+    forked.send({
+      filePath,
+      eventId
+    })
+  })
+}
+
+function crc64File(filePath) {
+  return new Promise(function(resolve, reject) {
+    crc64.crc64File(filePath, function(err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
       }
     })
   })
 }
 
-module.exports = { crc64FileProcess: crc64FileProcess }
+module.exports = { crc64FileProcess: crc64FileProcess, crc64File: crc64File }
